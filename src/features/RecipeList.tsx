@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Recipe  from "../api/dtos";
+import { Link, useHistory } from "react-router-dom";
+import { RecipeListItem } from "../api/dtos";
+import { getRecipes } from "../api/client";
 import { Spinner } from "../suitcase/atoms/Spinner/Spinner";
 import { Card } from "../suitcase/atoms/Card/Card";
 import { FormattedText } from "../suitcase/atoms/FormattedText/FormattedText";
@@ -8,10 +9,10 @@ import { Flex } from "../suitcase/atoms/Flex/Flex";
 import { Box } from "../suitcase/atoms/Box/Box";
 import { Button } from "../suitcase/atoms/Button/Button";
 import { dt } from "../suitcase/tokens";
-import * as Sentry from '@sentry/react';
 
 export const RecipeList: React.FC = () => {
-    const [recipes, setRecipes] = useState<readonly Recipe[]>([]);
+    const history = useHistory();
+    const [recipes, setRecipes] = useState<readonly RecipeListItem[]>([]);
     const [ loading, setLoading ] = useState<boolean>(true);
     const [ error, setError ] = useState<string | null>(null);
 
@@ -22,8 +23,7 @@ export const RecipeList: React.FC = () => {
                 const data = await getRecipes();
                 setRecipes(data);
             } catch (err: any) {
-                setError('Failed to load recipes: ${err.message}');
-                Sentry.captureException(error);
+                setError(`Failed to load recipes: ${err.message}`);
             } finally {
                 setLoading(false);
             }
