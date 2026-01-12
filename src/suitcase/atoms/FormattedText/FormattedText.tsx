@@ -51,10 +51,19 @@ function InnerFormattedText<C extends ElementType = 'div'>(
     )
   }
 
+  const style: React.CSSProperties = {}
+  if (props.fontSize) {
+    style.fontSize = props.fontSize
+  }
+  if (props.color) {
+    style.color = props.color
+  }
+
   return (
     <TagName
       ref={ref}
       className={`${styles.formattedText} ${className ? className : ''}`}
+      style={style}
       data-text-color={textColor || undefined}
       data-text-style={textStyle}
       data-font-weight={fontWeight || undefined}

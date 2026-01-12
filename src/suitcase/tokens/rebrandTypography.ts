@@ -16,4 +16,8 @@ export const rebrandTypescale: Record<string, Record<string, { fontSize: string;
     regular: { fontSize: '24px', lineHeight: '32px' },
     medium: { fontSize: '24px', lineHeight: '32px' },
   },
+  caption: {
+    regular: { fontSize: '14px', lineHeight: '20px' },
+    medium: { fontSize: '14px', lineHeight: '20px' },
+  },
 };
