@@ -1,6 +1,5 @@
-import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { SpinnerProps } from './types'
+import type { SpinnerProps } from './types'
 import { CircleSpinner, SpinnerContainer } from './SpinnerComponents'
 
 /**

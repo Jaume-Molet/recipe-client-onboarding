@@ -1,4 +1,4 @@
-import React from 'react'
+// No runtime React import needed with the modern JSX transform
 
 interface SkeletonProps {
   width?: string | number

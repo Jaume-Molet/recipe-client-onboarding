@@ -1,5 +1,4 @@
-import React from 'react'
-import { BoxProps } from './types'
+import type { BoxProps } from './types'
 import { dt } from '../../tokens'
 import styles from './Box.module.css'
 

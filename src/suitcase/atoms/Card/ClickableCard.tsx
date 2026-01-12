@@ -1,5 +1,4 @@
-import React from 'react'
-import { ClickableCardProps } from './types'
+import type { ClickableCardProps } from './types'
 import { StaticCard } from './StaticCard'
 
 export function ClickableCard(props: ClickableCardProps) {

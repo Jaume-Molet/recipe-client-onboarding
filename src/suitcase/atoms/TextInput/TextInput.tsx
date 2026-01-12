@@ -1,9 +1,10 @@
-import React from 'react'
 import styled from 'styled-components'
-import { TextInputProps } from './types'
+import type { InputHTMLAttributes } from 'react'
+import type { TextInputProps } from './types'
 import { dt } from '../../tokens'
 
-const StyledInput = styled.input<{ disabled?: boolean }>`
+type StyledInputProps = InputHTMLAttributes<HTMLInputElement> & { disabled?: boolean }
+const StyledInput = styled.input<StyledInputProps>`
   width: 100%;
   padding: ${dt.dimensions.spacing['1x']};
   font-size: ${dt.fontSizes.md};

@@ -1,6 +1,7 @@
 import styled from 'styled-components'
+import type React from 'react'
 
-interface StyledButtonProps {
+interface StyledButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   buttonHeight: string
   buttonWidth: string
   backgroundColor: string

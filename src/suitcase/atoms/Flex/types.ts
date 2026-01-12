@@ -1,4 +1,5 @@
-import { SpacingKey } from '../../../tokens'
+import type React from 'react'
+import type { SpacingKey } from '../../tokens'
 
 export const paddingKeys = [
   'padding',

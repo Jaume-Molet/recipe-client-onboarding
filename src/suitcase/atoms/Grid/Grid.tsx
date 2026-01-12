@@ -1,8 +1,10 @@
-import React from 'react'
-import styled, { StyledComponentProps } from 'styled-components'
-import { useResponsiveProps, ResponsiveProp } from '../../../hooks'
-import { GridItem, GridBasePositioning } from './GridItem'
-import { pick } from '../../../utils'
+import styled from 'styled-components'
+import type { StyledComponentProps } from 'styled-components'
+import { useResponsiveProps } from '../../hooks'
+import type { ResponsiveProp } from '../../hooks'
+import { GridItem } from './GridItem'
+import type { GridBasePositioning } from './GridItem'
+import { pick } from '../../utils'
 
 const whitelistValues = [
   'display',
@@ -31,7 +33,7 @@ export type GridProps = StyledComponentProps<
   'div',
   any,
   {
-    children?: React.ReactNode
+    children?: import('react').ReactNode
     display?: 'grid' | 'inline-grid'
     gridTemplateColumns?: ResponsiveProp<string>
     gridTemplateRows?: ResponsiveProp<string>
@@ -82,13 +84,15 @@ const Grid = styled.div<GridProps>((props) => {
   }
 })
 
-type GridComponentType = React.ForwardRefExoticComponent<
-  GridProps & React.RefAttributes<HTMLDivElement>
+type GridComponentType = import('react').ForwardRefExoticComponent<
+  GridProps & import('react').RefAttributes<HTMLDivElement>
 > & {
   Item: typeof GridItem
 }
-
-const GridComponent = React.forwardRef<HTMLDivElement, GridProps>(
+export { GridComponent as Grid }
+export type { GridBasePositioning }
+import { forwardRef } from 'react'
+const GridComponent = forwardRef<HTMLDivElement, GridProps>(
   function GridComponent(props, ref) {
     return <Grid {...props} ref={ref} />
   }
@@ -96,4 +100,4 @@ const GridComponent = React.forwardRef<HTMLDivElement, GridProps>(
 
 GridComponent.Item = GridItem
 
-export { GridComponent as Grid }
+// (removed duplicate export)

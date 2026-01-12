@@ -1,9 +1,9 @@
-import React from 'react'
-import { ButtonProps } from './types'
-import { ButtonContent } from './ButtonContent'
-import { buttonVariants } from './buttonVariants'
-import { buttonDimensions } from './buttonDimensions'
-import { StyledButton, ZenFocusMask } from './ButtonComponents'
+import type { MouseEvent } from 'react';
+import type { ButtonProps } from "./types";
+import { ButtonContent } from "./ButtonContent";
+import { buttonVariants } from "./buttonVariants";
+import { buttonDimensions } from "./buttonDimensions";
+import { StyledButton, ZenFocusMask } from "./ButtonComponents";
 
 /**
  * ## Button
@@ -42,7 +42,12 @@ import { StyledButton, ZenFocusMask } from './ButtonComponents'
  * `name`: The name of the button, useful for form submission.
  */
 const Button = (props: ButtonProps) => {
-  const { icon, size = 'default', variant, accessibleName } = props
+  const {
+    icon,
+    size = "default",
+    variant = "secondary",
+    accessibleName,
+  } = props;
 
   const {
     buttonHeight,
@@ -53,7 +58,7 @@ const Button = (props: ButtonProps) => {
     lineHeight,
     iconHeight,
     spinnerSize,
-  } = buttonDimensions[size]
+  } = buttonDimensions[size];
 
   const {
     backgroundColor,
@@ -64,12 +69,11 @@ const Button = (props: ButtonProps) => {
     iconColor,
     spinnerVariant,
     buttonTextDecoration,
-  } = buttonVariants[variant]
+  } = buttonVariants[variant];
 
   return (
     <>
       <StyledButton
-        ref={props.submitRef}
         buttonHeight={buttonHeight}
         buttonWidth={buttonWidth}
         backgroundColor={backgroundColor}
@@ -83,19 +87,19 @@ const Button = (props: ButtonProps) => {
         buttonTextDecoration={buttonTextDecoration}
         lineHeight={lineHeight}
         withZenFocus={props.withZenFocus}
-        onClick={(e) => {
+        onClick={(e: MouseEvent<HTMLButtonElement>) => {
           if (!props.loading) {
-            props.onClick?.(e)
+            props.onClick?.(e);
           }
         }}
         // attributes
         disabled={props.disabled}
         id={props.id}
         name={props.name}
-        data-testid={props['data-testid']}
-        type={props.submit ? 'submit' : 'button'}
+        data-testid={props["data-testid"]}
+        type={props.submit ? "submit" : "button"}
         value={props.value}
-        aria-label={accessibleName !== '' ? accessibleName : undefined}
+        aria-label={accessibleName !== "" ? accessibleName : undefined}
       >
         <ButtonContent
           loading={props.loading}
@@ -112,7 +116,7 @@ const Button = (props: ButtonProps) => {
       </StyledButton>
       {props.withZenFocus && <ZenFocusMask show data-testid="zen-focus-mask" />}
     </>
-  )
-}
+  );
+};
 
-export { Button }
+export { Button };

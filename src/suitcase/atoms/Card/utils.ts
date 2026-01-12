@@ -1,4 +1,4 @@
-import { CardProps, ClickableCardProps, SelectableCardProps } from './types'
+import type { CardProps, ClickableCardProps, SelectableCardProps } from './types'
 
 export function isComponentPropsClickableCardProps(
   props: CardProps

@@ -1,6 +1,6 @@
-import { TextStyle } from './types'
+import type { TextStyle } from './types'
 
-export function getPlaceholderColorFromTextStyle(textStyle: TextStyle): 'light' | 'dark' {
+export function getPlaceholderColorFromTextStyle(_textStyle: TextStyle): 'light' | 'dark' {
   // Simple implementation - return 'light' for most styles
   return 'light'
 }

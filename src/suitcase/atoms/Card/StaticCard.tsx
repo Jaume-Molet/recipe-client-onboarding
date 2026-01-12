@@ -1,5 +1,4 @@
-import React from 'react'
-import { StaticCardProps } from './types'
+import type { StaticCardProps } from './types'
 import { dt } from '../../tokens'
 
 export function StaticCard(props: StaticCardProps) {

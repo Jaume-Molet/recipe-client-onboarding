@@ -1,7 +1,8 @@
 import styled from 'styled-components'
-import { FlexProps, paddingKeys } from './types'
-import { CSSProperties, ReactNode } from 'react'
-import { dt, isSpacingDimensionKey } from '../../../tokens'
+import type { FlexProps } from './types'
+import { paddingKeys } from './types'
+import type { CSSProperties, ReactNode } from 'react'
+import { dt, isSpacingDimensionKey } from '../../tokens'
 
 const whitelistValues = [
   'display',

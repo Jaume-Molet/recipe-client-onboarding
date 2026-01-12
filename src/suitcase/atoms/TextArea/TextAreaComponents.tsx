@@ -1,4 +1,3 @@
-import React from 'react'
 import { dt } from '../../tokens'
 import styles from './TextAreaComponents.module.css'
 
@@ -15,8 +14,9 @@ export function TextAreaWrapper(props: TextAreaWrapperProps) {
   return <div className={className}>{children}</div>
 }
 
+import type { CSSProperties } from 'react'
 interface StyledTextAreaProps {
-  resize?: string
+  resize?: CSSProperties['resize']
   minHeight?: string | number
   height?: string | number
   [key: string]: any
@@ -25,7 +25,7 @@ interface StyledTextAreaProps {
 export function StyledTextArea(props: StyledTextAreaProps) {
   const { resize, minHeight, height, ...rest } = props
   
-  const style: React.CSSProperties = {
+  const style: CSSProperties = {
     padding: dt.dimensions.spacing['1x'],
     fontSize: dt.fontSizes.md,
     fontFamily: 'inherit',

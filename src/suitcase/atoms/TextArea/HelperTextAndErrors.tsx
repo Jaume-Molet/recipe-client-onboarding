@@ -1,4 +1,3 @@
-import React from 'react'
 import { dt } from '../../tokens'
 import { FormattedText } from '../FormattedText/FormattedText'
 

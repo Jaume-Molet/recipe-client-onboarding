@@ -1,12 +1,16 @@
 import styled from 'styled-components'
 
-export const SpinnerContainer = styled.div`
+export const SpinnerContainer = styled.div<{ children?: import('react').ReactNode }>`
   display: flex;
   align-items: center;
   gap: 8px;
 `
 
-export const CircleSpinner = styled.div`
+export const CircleSpinner = styled.div<{
+  'data-variant'?: 'light' | 'dark'
+  'data-size'?: 'small' | 'medium' | 'large'
+  'data-testid'?: string
+}>`
   width: 20px;
   height: 20px;
   border: 2px solid transparent;

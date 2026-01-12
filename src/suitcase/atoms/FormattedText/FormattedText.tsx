@@ -1,9 +1,10 @@
-import React, { ElementType, forwardRef, ForwardedRef, ElementRef } from 'react'
-import { FormattedTextComponent, FormattedTextProps } from './types'
+import { forwardRef } from 'react'
+import type { ElementType, ForwardedRef, ElementRef } from 'react'
+import type { FormattedTextComponent, FormattedTextProps } from './types'
 import styles from './FormattedText.module.css'
-import { Skeleton } from '../Skeleton'
+import { Skeleton } from '../Skeleton/Skeleton'
 import { getPlaceholderColorFromTextStyle } from './utils'
-import { rebrandTypescale } from '../../../tokens'
+import { rebrandTypescale } from '../../tokens'
 
 function InnerFormattedText<C extends ElementType = 'div'>(
   props: FormattedTextProps<C>,
@@ -61,7 +62,7 @@ function InnerFormattedText<C extends ElementType = 'div'>(
 
   return (
     <TagName
-      ref={ref}
+      ref={ref as any}
       className={`${styles.formattedText} ${className ? className : ''}`}
       style={style}
       data-text-color={textColor || undefined}

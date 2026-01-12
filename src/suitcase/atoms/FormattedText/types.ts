@@ -1,4 +1,5 @@
-import React, { ElementType, ForwardedRef, ElementRef } from 'react'
+import type React from 'react'
+import type { ElementType, ForwardedRef, ElementRef } from 'react'
 
 export type TextStyle = 'body' | 'headline' | 'display' | 'caption'
 export type FontWeight = 'regular' | 'medium'

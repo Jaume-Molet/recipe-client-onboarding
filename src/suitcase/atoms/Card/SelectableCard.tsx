@@ -1,5 +1,4 @@
-import React from 'react'
-import { SelectableCardProps } from './types'
+import type { SelectableCardProps } from './types'
 import { StaticCard } from './StaticCard'
 
 export function SelectableCard(props: SelectableCardProps) {

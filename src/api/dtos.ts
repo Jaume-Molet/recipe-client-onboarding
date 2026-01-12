@@ -21,6 +21,7 @@ export interface RecipesResponse {
     readonly recipes: readonly RecipeListItem[];
 }
 
+// Input types for API operations
 export interface CreateRecipeInput {
     readonly name: string;
     readonly author_id: string;
@@ -35,3 +36,4 @@ export interface UpdateRecipeInput {
 export interface DeleteRecipeInput {
     readonly requester_id: string;
 }
+

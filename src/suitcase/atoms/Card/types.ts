@@ -1,5 +1,4 @@
-import { SpacingKey } from '../../../tokens'
-import { BorderRadiusKey } from '../../../tokens'
+import type { SpacingKey, BorderRadiusKey } from '../../tokens'
 
 export interface BaseCardProps {
   children?: React.ReactNode

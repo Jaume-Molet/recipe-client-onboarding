@@ -1,4 +1,4 @@
-import React from 'react'
+// No runtime React import needed with the modern JSX transform
 
 interface InputLabelProps {
   label: string
