@@ -1,53 +1,41 @@
-import styled from 'styled-components'
+import React from 'react'
 import { dt } from '../../tokens'
+import styles from './TextAreaComponents.module.css'
 
 interface TextAreaWrapperProps {
   disabled?: boolean
   validation?: 'error' | 'warning' | 'success' | null
+  children?: React.ReactNode
 }
 
-export const TextAreaWrapper = styled.div<TextAreaWrapperProps>`
-  position: relative;
-  width: 100%;
+export function TextAreaWrapper(props: TextAreaWrapperProps) {
+  const { disabled, validation, children } = props
+  const className = `${styles.textAreaWrapper} ${disabled ? styles.disabled : ''} ${validation ? styles[validation] : ''}`
   
-  ${(props) =>
-    props.disabled &&
-    `
-    opacity: 0.6;
-    cursor: not-allowed;
-  `}
-`
+  return <div className={className}>{children}</div>
+}
 
-export const StyledTextArea = styled.textarea<{
+interface StyledTextAreaProps {
   resize?: string
   minHeight?: string | number
   height?: string | number
-}>`
-  width: 100%;
-  padding: ${dt.dimensions.spacing['1x']};
-  font-size: ${dt.fontSizes.md};
-  font-family: inherit;
-  border: 1px solid #ccc;
-  border-radius: ${dt.dimensions.borderRadius.sm};
-  box-sizing: border-box;
-  resize: ${(props) => props.resize || 'vertical'};
-  min-height: ${(props) =>
-    typeof props.minHeight === 'number' ? `${props.minHeight}px` : props.minHeight || 'auto'};
-  height: ${(props) =>
-    typeof props.height === 'number' ? `${props.height}px` : props.height || 'auto'};
+  [key: string]: any
+}
 
-  &:focus {
-    outline: none;
-    border-color: #0066cc;
+export function StyledTextArea(props: StyledTextAreaProps) {
+  const { resize, minHeight, height, ...rest } = props
+  
+  const style: React.CSSProperties = {
+    padding: dt.dimensions.spacing['1x'],
+    fontSize: dt.fontSizes.md,
+    fontFamily: 'inherit',
+    border: '1px solid #ccc',
+    borderRadius: dt.dimensions.borderRadius.sm,
+    boxSizing: 'border-box',
+    resize: resize || 'vertical',
+    minHeight: typeof minHeight === 'number' ? `${minHeight}px` : minHeight || 'auto',
+    height: typeof height === 'number' ? `${height}px` : height || 'auto',
   }
-
-  &:disabled {
-    background-color: #f5f5f5;
-    cursor: not-allowed;
-    opacity: 0.6;
-  }
-
-  &::placeholder {
-    color: ${dt.colors.text.secondary};
-  }
-`
+  
+  return <textarea className={styles.styledTextArea} style={style} {...rest} />
+}
