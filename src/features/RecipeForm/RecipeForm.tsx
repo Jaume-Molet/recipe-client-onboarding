@@ -14,6 +14,14 @@ interface IngredientInput {
     name: string;
 }
 
+/**
+ * RecipeForm Component
+ * 
+ * Handles both creating new recipes and editing existing recipes.
+ * 
+ * Note: In edit mode, only ingredients can be added. The recipe name and author_id
+ * cannot be changed as the backend API only supports adding ingredients to existing recipes.
+ */
 export const RecipeForm: React.FC = () => {
     const { id } = useParams<{ id?: string }>();
     const history = useHistory();
@@ -77,7 +85,8 @@ export const RecipeForm: React.FC = () => {
         try {
             setSubmitting(true);
             if (isEditMode && id) {
-                // Edit mode: update recipe (add ingredients)
+                // Edit mode: add ingredients to existing recipe
+                // Note: The backend API only supports adding ingredients, not updating recipe name or removing ingredients
                 await updateRecipe(id, {
                     requester_id: authorId,
                     ingredients_to_add: validIngredients,
@@ -128,7 +137,7 @@ export const RecipeForm: React.FC = () => {
                             <TextInput
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                disabled={submitting}
+                                disabled={submitting || isEditMode}
                                 required
                             />
                         </Flex>
