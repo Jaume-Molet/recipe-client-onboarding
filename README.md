@@ -38,7 +38,7 @@ Before you begin, ensure you have the following installed:
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:Jaume-Molet/recipe-client-onboarding.git
    cd recipe-client
    ```
 
@@ -57,7 +57,7 @@ Before you begin, ensure you have the following installed:
 
 This frontend requires the Django backend to be running. Before starting the frontend:
 
-1. Ensure the Django backend is running (see `django-onboarding/README.md`)
+1. Ensure the Django backend is running (see `django-onboarding/README.md`) at https://github.com/travelperk/django-onboarding/pull/58
 2. Verify the backend API is accessible:
    ```bash
    curl http://localhost:8000/api/recipes
