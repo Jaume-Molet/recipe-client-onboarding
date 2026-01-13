@@ -65,6 +65,7 @@ describe('RecipeDetail', () => {
       id: '1',
       name: 'Test Recipe',
       author_id: 'author-1',
+      author_name: 'Test Author',
       ingredients: [
         { id: 'ing-1', name: 'Ingredient 1' },
         { id: 'ing-2', name: 'Ingredient 2' },
@@ -100,6 +101,7 @@ describe('RecipeDetail', () => {
       id: '1',
       name: 'Test Recipe',
       author_id: 'author-1',
+      author_name: 'Test Author',
       ingredients: [],
     }
 
@@ -126,6 +128,7 @@ describe('RecipeDetail', () => {
       id: '1',
       name: 'Test Recipe',
       author_id: 'author-1',
+      author_name: 'Test Author',
       ingredients: [],
     }
 
@@ -148,7 +151,7 @@ describe('RecipeDetail', () => {
 
     await waitFor(() => {
       expect(mockConfirm).toHaveBeenCalledWith('Are you sure you want to delete "Test Recipe"?')
-      expect(apiClient.deleteRecipe).toHaveBeenCalledWith('1', 'author-1')
+      expect(apiClient.deleteRecipe).toHaveBeenCalledWith('1', 'Test Author')
     })
     
     await waitFor(() => {
@@ -161,6 +164,7 @@ describe('RecipeDetail', () => {
       id: '1',
       name: 'Test Recipe',
       author_id: 'author-1',
+      author_name: 'Test Author',
       ingredients: [],
     }
 

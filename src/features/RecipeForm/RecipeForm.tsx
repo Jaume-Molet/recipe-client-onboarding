@@ -19,8 +19,9 @@ interface IngredientInput {
  *
  * Handles both creating new recipes and editing existing recipes.
  *
- * Note: In edit mode, only ingredients can be added. The recipe name and author_id
- * cannot be changed as the backend API only supports adding ingredients to existing recipes.
+ * Note: In edit mode, only ingredients can be added. The recipe name cannot be changed
+ * as the backend API only supports adding ingredients to existing recipes.
+ * The author name field is used as the requester name for authorization.
  */
 export const RecipeForm: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -28,7 +29,7 @@ export const RecipeForm: React.FC = () => {
   const isEditMode = !!id;
 
   const [name, setName] = useState<string>("");
-  const [authorId, setAuthorId] = useState<string>("");
+  const [authorName, setAuthorName] = useState<string>("");
   const [ingredients, setIngredients] = useState<readonly IngredientInput[]>(
     []
   );
@@ -43,7 +44,7 @@ export const RecipeForm: React.FC = () => {
           setLoading(true);
           const recipe: Recipe = await getRecipe(id);
           setName(recipe.name);
-          setAuthorId(recipe.author_id);
+          setAuthorName(recipe.author_name || "");
           setIngredients(recipe.ingredients.map((ing) => ({ name: ing.name })));
         } catch (err: any) {
           setError(`Failed to load recipe: ${err.message}`);
@@ -73,8 +74,8 @@ export const RecipeForm: React.FC = () => {
     e.preventDefault();
     setError(null);
 
-    if (!name.trim() || !authorId.trim()) {
-      setError("Recipe name and author ID are required");
+    if (!name.trim() || !authorName.trim()) {
+      setError("Recipe name and author name are required");
       return;
     }
 
@@ -90,7 +91,7 @@ export const RecipeForm: React.FC = () => {
         // Edit mode: add ingredients to existing recipe
         // Note: The backend API only supports adding ingredients, not updating recipe name or removing ingredients
         await updateRecipe(id, {
-          requester_id: authorId,
+          requester_name: authorName.trim(),
           ingredients_to_add: validIngredients,
         });
         history.push(`/recipes/${id}`);
@@ -98,7 +99,7 @@ export const RecipeForm: React.FC = () => {
         // Create mode: create new recipe
         const newRecipe = await createRecipe({
           name: name.trim(),
-          author_id: authorId.trim(),
+          author_name: authorName.trim(),
           ingredients: validIngredients,
         });
         history.push(`/recipes/${newRecipe.id}`);
@@ -153,17 +154,23 @@ export const RecipeForm: React.FC = () => {
               <FormattedText
                 as="label"
                 fontSize={dt.fontSizes.md}
-                htmlFor="author-id"
+                htmlFor="author-name"
               >
-                Author ID (UUID)
+                {isEditMode ? "Your Name (Requester)" : "Author Name"}
               </FormattedText>
               <TextInput
-                id="author-id"
-                value={authorId}
-                onChange={(e) => setAuthorId(e.target.value)}
-                disabled={submitting || isEditMode}
+                id="author-name"
+                value={authorName}
+                onChange={(e) => setAuthorName(e.target.value)}
+                disabled={submitting}
                 required
+                placeholder={isEditMode ? "Enter your name to add ingredients" : "Enter your name"}
               />
+              {isEditMode && (
+                <FormattedText color={dt.colors.text.secondary} fontSize={dt.fontSizes.sm}>
+                  You must enter your name to add ingredients to this recipe.
+                </FormattedText>
+              )}
             </Flex>
 
             <Flex flexDirection="column" gap={dt.dimensions.spacing["1x"]}>

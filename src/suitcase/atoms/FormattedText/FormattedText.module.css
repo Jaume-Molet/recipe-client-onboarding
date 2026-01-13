@@ -1,3 +1,36 @@
 .formattedText {
-  /* Minimal styles for FormattedText component */
+  color: #213547;
+}
+
+@media (prefers-color-scheme: dark) {
+  .formattedText {
+    color: rgba(255, 255, 255, 0.87);
+  }
+}
+
+/* Text color variants using data attributes */
+.formattedText[data-text-color="primary"] {
+  color: #213547;
+}
+
+.formattedText[data-text-color="secondary"] {
+  color: #666;
+}
+
+.formattedText[data-text-color="error"] {
+  color: #d32f2f;
+}
+
+@media (prefers-color-scheme: dark) {
+  .formattedText[data-text-color="primary"] {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .formattedText[data-text-color="secondary"] {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .formattedText[data-text-color="error"] {
+    color: #f44336;
+  }
 }

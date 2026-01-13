@@ -42,9 +42,14 @@ export const RecipeDetail: React.FC = () => {
     );
     if (!confirmed) return;
 
+    if (!recipe.author_name) {
+      setError("Cannot delete recipe: author name is not available");
+      return;
+    }
+
     try {
       setDeleting(true);
-      await deleteRecipe(recipe.id, recipe.author_id);
+      await deleteRecipe(recipe.id, recipe.author_name);
       history.push("/");
     } catch (err: any) {
       setError(`Failed to delete recipe: ${err.message}`);

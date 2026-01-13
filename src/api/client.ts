@@ -40,7 +40,7 @@ export async function createRecipe(input: CreateRecipeInput): Promise<Recipe> {
     },
     body: JSON.stringify({
       name: input.name,
-      author_id: input.author_id,
+      author_name: input.author_name,
       ingredients: input.ingredients,
     }),
   });
@@ -57,7 +57,7 @@ export async function updateRecipe(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      requester_id: input.requester_id,
+      requester_name: input.requester_name,
       ingredients_to_add: input.ingredients_to_add,
     }),
   });
@@ -66,7 +66,7 @@ export async function updateRecipe(
 
 export async function deleteRecipe(
   id: string,
-  requesterId: string
+  requesterName: string
 ): Promise<void> {
   const response = await fetch(`${BASE_URL}/recipes/${id}`, {
     method: "DELETE",
@@ -74,7 +74,7 @@ export async function deleteRecipe(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      requester_id: requesterId,
+      requester_name: requesterName,
     }),
   });
   await handleResponse<void>(response);

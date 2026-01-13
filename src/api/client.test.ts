@@ -87,7 +87,7 @@ describe('API Client', () => {
     it('should create recipe successfully', async () => {
       const input: CreateRecipeInput = {
         name: 'New Recipe',
-        author_id: 'author-1',
+        author_name: 'Test Author',
         ingredients: [{ name: 'Ingredient 1' }],
       }
 
@@ -95,6 +95,7 @@ describe('API Client', () => {
         id: 'new-id',
         name: 'New Recipe',
         author_id: 'author-1',
+        author_name: 'Test Author',
         ingredients: [{ id: 'ing-1', name: 'Ingredient 1' }],
       }
 
@@ -112,7 +113,7 @@ describe('API Client', () => {
         },
         body: JSON.stringify({
           name: input.name,
-          author_id: input.author_id,
+          author_name: input.author_name,
           ingredients: input.ingredients,
         }),
       })
@@ -122,7 +123,7 @@ describe('API Client', () => {
     it('should throw error on creation failure', async () => {
       const input: CreateRecipeInput = {
         name: 'New Recipe',
-        author_id: 'author-1',
+        author_name: 'Test Author',
         ingredients: [],
       }
 
@@ -139,7 +140,7 @@ describe('API Client', () => {
   describe('updateRecipe', () => {
     it('should update recipe successfully', async () => {
       const input: UpdateRecipeInput = {
-        requester_id: 'author-1',
+        requester_name: 'Test Author',
         ingredients_to_add: [{ name: 'New Ingredient' }],
       }
 
@@ -147,6 +148,7 @@ describe('API Client', () => {
         id: '1',
         name: 'Recipe 1',
         author_id: 'author-1',
+        author_name: 'Test Author',
         ingredients: [
           { id: 'ing-1', name: 'Ingredient 1' },
           { id: 'ing-2', name: 'New Ingredient' },
@@ -166,7 +168,7 @@ describe('API Client', () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          requester_id: input.requester_id,
+          requester_name: input.requester_name,
           ingredients_to_add: input.ingredients_to_add,
         }),
       })
@@ -175,7 +177,7 @@ describe('API Client', () => {
 
     it('should throw error on update failure', async () => {
       const input: UpdateRecipeInput = {
-        requester_id: 'author-1',
+        requester_name: 'Test Author',
         ingredients_to_add: [],
       }
 
@@ -196,7 +198,7 @@ describe('API Client', () => {
         status: 204,
       })
 
-      await deleteRecipe('1', 'author-1')
+      await deleteRecipe('1', 'Test Author')
 
       expect(mockFetch).toHaveBeenCalledWith('/api/recipes/1', {
         method: 'DELETE',
@@ -204,7 +206,7 @@ describe('API Client', () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          requester_id: 'author-1',
+          requester_name: 'Test Author',
         }),
       })
     })
@@ -216,7 +218,7 @@ describe('API Client', () => {
         text: async () => 'Not Found',
       })
 
-      await expect(deleteRecipe('999', 'author-1')).rejects.toThrow('API error: 404 - Not Found')
+      await expect(deleteRecipe('999', 'Test Author')).rejects.toThrow('API error: 404 - Not Found')
     })
   })
 })

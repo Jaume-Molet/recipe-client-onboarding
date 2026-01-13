@@ -40,7 +40,7 @@ describe('RecipeForm', () => {
       // #endregion
       expect(screen.getByText('Create New Recipe')).toBeVisible()
       expect(screen.getByLabelText(/Recipe Name/i)).toBeVisible()
-      expect(screen.getByLabelText(/Author ID/i)).toBeVisible()
+      expect(screen.getByLabelText(/Author Name/i)).toBeVisible()
     })
 
     it('should allow editing recipe name and author in create mode', () => {
@@ -51,7 +51,7 @@ describe('RecipeForm', () => {
       )
 
       const nameInput = screen.getByLabelText(/Recipe Name/i)
-      const authorInput = screen.getByLabelText(/Author ID/i)
+      const authorInput = screen.getByLabelText(/Author Name/i)
 
       expect(nameInput).not.toBeDisabled()
       expect(authorInput).not.toBeDisabled()
@@ -62,6 +62,7 @@ describe('RecipeForm', () => {
         id: 'new-id',
         name: 'New Recipe',
         author_id: 'author-1',
+        author_name: 'Test Author',
         ingredients: [{ id: 'ing-1', name: 'Ingredient 1' }],
       }
 
@@ -74,7 +75,7 @@ describe('RecipeForm', () => {
       )
 
       await userEvent.type(screen.getByLabelText(/Recipe Name/i), 'New Recipe')
-      await userEvent.type(screen.getByLabelText(/Author ID/i), 'author-1')
+      await userEvent.type(screen.getByLabelText(/Author Name/i), 'Test Author')
       
       // Add ingredient first
       const addButton = screen.getByRole('button', { name: /Add Ingredient/i })
@@ -93,7 +94,7 @@ describe('RecipeForm', () => {
       await userEvent.type(ingredientInput, 'Ingredient 1')
       // #region agent log
       const nameInput = screen.getByLabelText(/Recipe Name/i) as HTMLInputElement;
-      const authorInput = screen.getByLabelText(/Author ID/i) as HTMLInputElement;
+      const authorInput = screen.getByLabelText(/Author Name/i) as HTMLInputElement;
       fetch('http://127.0.0.1:7242/ingest/243a064f-b193-47e6-b2f5-bb043de99496',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'RecipeForm.test.tsx:94',message:'After typing ingredient',data:{ingredientValue:(ingredientInput as HTMLInputElement).value,nameValue:nameInput.value,authorValue:authorInput.value},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'E'})}).catch(()=>{});
       // #endregion
 
@@ -117,7 +118,7 @@ describe('RecipeForm', () => {
         // #endregion
         expect(apiClient.createRecipe).toHaveBeenCalledWith({
           name: 'New Recipe',
-          author_id: 'author-1',
+          author_name: 'Test Author',
           ingredients: [{ name: 'Ingredient 1' }],
         })
       })
@@ -195,6 +196,7 @@ describe('RecipeForm', () => {
         id: '1',
         name: 'Existing Recipe',
         author_id: 'author-1',
+        author_name: 'Test Author',
         ingredients: [
           { id: 'ing-1', name: 'Ingredient 1' },
         ],
@@ -223,6 +225,7 @@ describe('RecipeForm', () => {
         id: '1',
         name: 'Existing Recipe',
         author_id: 'author-1',
+        author_name: 'Test Author',
         ingredients: [],
       }
 
@@ -236,9 +239,9 @@ describe('RecipeForm', () => {
 
       await waitFor(() => {
         const nameInput = screen.getByDisplayValue('Existing Recipe')
-        const authorInput = screen.getByDisplayValue('author-1')
+        const authorInput = screen.getByDisplayValue('Test Author')
         expect(nameInput).toBeDisabled()
-        expect(authorInput).toBeDisabled()
+        expect(authorInput).not.toBeDisabled() // Author name should be editable in edit mode for requester
       })
     })
 
@@ -247,6 +250,7 @@ describe('RecipeForm', () => {
         id: '1',
         name: 'Existing Recipe',
         author_id: 'author-1',
+        author_name: 'Test Author',
         ingredients: [],
       }
 
@@ -273,6 +277,11 @@ describe('RecipeForm', () => {
         expect(screen.getByDisplayValue('Existing Recipe')).toBeVisible()
       })
 
+      // Enter requester name
+      const authorInput = screen.getByLabelText(/Your Name/i) as HTMLInputElement
+      await userEvent.clear(authorInput)
+      await userEvent.type(authorInput, 'Test Author')
+
       // Add new ingredient - in edit mode with empty ingredients, there are no inputs initially
       const addButton = screen.getByRole('button', { name: /Add Ingredient/i })
       await userEvent.click(addButton)
@@ -291,7 +300,7 @@ describe('RecipeForm', () => {
 
       await waitFor(() => {
         expect(apiClient.updateRecipe).toHaveBeenCalledWith('1', {
-          requester_id: 'author-1',
+          requester_name: 'Test Author',
           ingredients_to_add: [{ name: 'New Ingredient' }],
         })
       })
