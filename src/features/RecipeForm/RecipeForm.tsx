@@ -56,20 +56,40 @@ export const RecipeForm: React.FC = () => {
     }
   }, [id, isEditMode]);
 
+  /**
+   * Adds a new empty ingredient input field to the form.
+   */
   const handleAddIngredient = () => {
     setIngredients([...ingredients, { name: "" }]);
   };
 
+  /**
+   * Removes an ingredient input field at the specified index.
+   *
+   * @param index - The index of the ingredient to remove
+   */
   const handleRemoveIngredient = (index: number) => {
     setIngredients(ingredients.filter((_, i) => i !== index));
   };
 
+  /**
+   * Updates the name of an ingredient at the specified index.
+   *
+   * @param index - The index of the ingredient to update
+   * @param value - The new name value for the ingredient
+   */
   const handleIngredientChange = (index: number, value: string) => {
     const updated = [...ingredients];
     updated[index] = { name: value };
     setIngredients(updated);
   };
 
+  /**
+   * Handles form submission for both create and edit modes.
+   * Validates required fields and ingredients, then calls the appropriate API.
+   *
+   * @param e - The form submission event
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -123,9 +143,18 @@ export const RecipeForm: React.FC = () => {
   return (
     <Box padding={dt.dimensions.spacing["3x"]}>
       <Flex flexDirection="column" gap={dt.dimensions.spacing["3x"]}>
-        <FormattedText as="h1" fontSize={dt.fontSizes.lg}>
-          {isEditMode ? "Edit Recipe" : "Create New Recipe"}
-        </FormattedText>
+        <Flex justifyContent="space-between" alignItems="center">
+          <FormattedText as="h1" fontSize={dt.fontSizes.lg}>
+            {isEditMode ? "Edit Recipe" : "Create New Recipe"}
+          </FormattedText>
+          <Button
+            variant="secondary"
+            onClick={() => history.push("/")}
+            disabled={submitting}
+          >
+            Back to Recipes
+          </Button>
+        </Flex>
 
         {error && (
           <FormattedText color={dt.colors.text.error}>{error}</FormattedText>

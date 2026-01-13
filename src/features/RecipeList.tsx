@@ -10,16 +10,19 @@ import { Box } from "../suitcase/atoms/Box/Box";
 import { Button } from "../suitcase/atoms/Button/Button";
 import { dt } from "../suitcase/tokens";
 
+/**
+ * RecipeList Component
+ *
+ * Displays a list of all recipes with the ability to navigate to individual recipes
+ * or create a new recipe. Handles loading states and error handling.
+ *
+ * @returns {JSX.Element} The recipe list view
+ */
 export const RecipeList: React.FC = () => {
   const history = useHistory();
   const [recipes, setRecipes] = useState<readonly RecipeListItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  console.log("RecipeList component rendering");
-  console.log("  - loading:", loading);
-  console.log("  - error:", error);
-  console.log("  - recipes count:", recipes.length);
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -92,7 +95,7 @@ export const RecipeList: React.FC = () => {
               <FormattedText
                 as="h2"
                 fontSize={dt.fontSizes.md}
-                color={dt.colors.text.primary}
+                color="#ffffff"
               >
                 {recipe.name}
               </FormattedText>

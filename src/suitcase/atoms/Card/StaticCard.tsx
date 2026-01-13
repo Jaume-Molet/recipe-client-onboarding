@@ -15,11 +15,13 @@ export function StaticCard(props: StaticCardProps) {
   return (
     <div
       data-testid={testId}
+      className="card-container"
       style={{
         padding: paddingValue || '0',
         borderRadius: borderRadiusValue || '0',
         border: '1px solid #e0e0e0',
         backgroundColor: '#ffffff',
+        color: '#213547',
       }}
     >
       {children}

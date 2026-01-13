@@ -10,6 +10,14 @@ import { Box } from "../../suitcase/atoms/Box/Box";
 import { Button } from "../../suitcase/atoms/Button/Button";
 import { dt } from "../../suitcase/tokens";
 
+/**
+ * RecipeDetail Component
+ *
+ * Displays detailed information about a single recipe, including its name,
+ * author, and ingredients. Provides actions to edit, delete, or navigate back.
+ *
+ * @returns {JSX.Element} The recipe detail view
+ */
 export const RecipeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
@@ -34,6 +42,10 @@ export const RecipeDetail: React.FC = () => {
     fetchRecipe();
   }, [id]);
 
+  /**
+   * Handles recipe deletion with user confirmation.
+   * Navigates back to the recipe list after successful deletion.
+   */
   const handleDelete = async () => {
     if (!recipe) return;
 
@@ -89,6 +101,13 @@ export const RecipeDetail: React.FC = () => {
             {recipe.name}
           </FormattedText>
           <Flex gap={dt.dimensions.spacing["2x"]}>
+            <Button
+              variant="secondary"
+              onClick={() => history.push("/")}
+              disabled={deleting}
+            >
+              Back to Recipes
+            </Button>
             <Button
               variant="secondary"
               onClick={() => history.push(`/recipes/${id}/edit`)}

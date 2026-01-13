@@ -1,26 +1,16 @@
-// import { StrictMode } from 'react'
-// import { createRoot } from 'react-dom/client'
-// import './index.css'
-// import App from './App.tsx'
-
-// createRoot(document.getElementById('root')!).render(
-//   <StrictMode>
-//     <App />
-//   </StrictMode>,
-// )
-
 import React from 'react'
 import ReactDOM from 'react-dom' // Note: NOT 'react-dom/client'
 import App from './App'
-import './index.css' // Uncomment if you have global styles
+import './index.css'
 
-// React 17 Mounting Logic
+/**
+ * Application entry point for React 17.
+ * Mounts the App component to the root DOM element with error handling.
+ */
 const rootElement = document.getElementById('root');
 if (!rootElement) {
   throw new Error('Root element not found');
 }
-
-console.log('Starting React app mount...');
 
 try {
   ReactDOM.render(
@@ -29,7 +19,6 @@ try {
     </React.StrictMode>,
     rootElement
   );
-  console.log('✅ React app mounted successfully');
 } catch (error) {
   console.error('❌ Failed to mount React app:', error);
   const errorMessage = error instanceof Error ? error.message : String(error);

@@ -4,9 +4,18 @@ import { RecipeDetail } from './features/RecipeDetail/RecipeDetail';
 import { RecipeForm } from './features/RecipeForm/RecipeForm';
 import './App.css';
 
+/**
+ * Main App Component
+ *
+ * Sets up React Router with routes for:
+ * - / (RecipeList)
+ * - /recipes/new (RecipeForm - create mode)
+ * - /recipes/:id (RecipeDetail)
+ * - /recipes/:id/edit (RecipeForm - edit mode)
+ *
+ * @returns {JSX.Element} The root application component with routing
+ */
 function App() {
-  console.log('App component rendering, current path:', window.location.pathname);
-  
   try {
     return (
       <BrowserRouter>
