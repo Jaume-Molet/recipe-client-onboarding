@@ -1,9 +1,9 @@
-import { TextAreaProps } from './types'
+import type { TextAreaProps } from './types'
 import { InputLabel } from '../InputLabel'
 import { StyledTextArea, TextAreaWrapper } from './TextAreaComponents'
 import { HelperTextAndErrors } from './HelperTextAndErrors'
-import React from 'react'
-import { useId } from '../../../hooks'
+import type { ChangeEvent } from 'react'
+import { useId } from '../../hooks'
 
 function TextArea(props: TextAreaProps) {
   const {
@@ -53,7 +53,7 @@ function TextArea(props: TextAreaProps) {
           id={id}
           data-testid={dataTestId}
           value={value}
-          onChange={(evt) => onChange(evt.target.value)}
+          onChange={(evt: ChangeEvent<HTMLTextAreaElement>) => onChange?.(evt.target.value)}
           onFocus={onFocus}
           onBlur={onBlur}
           name={name}

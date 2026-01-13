@@ -1,7 +1,6 @@
-import React from 'react'
 import { SelectableCard } from './SelectableCard'
 import { StaticCard } from './StaticCard'
-import { CardProps } from './types'
+import type { CardProps } from './types'
 import { ClickableCard } from './ClickableCard'
 import {
   isComponentPropsClickableCardProps,

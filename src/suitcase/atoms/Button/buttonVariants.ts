@@ -1,0 +1,32 @@
+export const buttonVariants = {
+  primary: {
+    backgroundColor: '#0066cc',
+    backgroundHoverOverlay: 'rgba(255, 255, 255, 0.1)',
+    backgroundPressedOverlay: 'rgba(0, 0, 0, 0.1)',
+    borderColor: '#0066cc',
+    textColor: '#ffffff',
+    iconColor: '#ffffff',
+    spinnerVariant: 'light' as const,
+    buttonTextDecoration: 'none',
+  },
+  secondary: {
+    backgroundColor: '#f5f5f5',
+    backgroundHoverOverlay: 'rgba(0, 0, 0, 0.05)',
+    backgroundPressedOverlay: 'rgba(0, 0, 0, 0.1)',
+    borderColor: '#cccccc',
+    textColor: '#000000',
+    iconColor: '#000000',
+    spinnerVariant: 'dark' as const,
+    buttonTextDecoration: 'none',
+  },
+  negativeSecondary: {
+    backgroundColor: '#f5f5f5',
+    backgroundHoverOverlay: 'rgba(0, 0, 0, 0.05)',
+    backgroundPressedOverlay: 'rgba(0, 0, 0, 0.1)',
+    borderColor: '#d32f2f',
+    textColor: '#d32f2f',
+    iconColor: '#d32f2f',
+    spinnerVariant: 'dark' as const,
+    buttonTextDecoration: 'none',
+  },
+} as const
