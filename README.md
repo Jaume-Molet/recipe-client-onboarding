@@ -2,6 +2,8 @@
 
 A React frontend for the Recipe Management System. This project was built as part of the Frontend Engineering Onboarding to demonstrate proficiency with the Perk stack, legacy constraints, and strict architectural standards.
 
+https://www.loom.com/share/eb2ffb02dc4a4926a1f0ef0149aa320f
+
 ## 📋 Project Overview
 
 This application provides a user interface for creating, viewing, editing, and deleting recipes. It interacts with the Django Backend Service via REST API.
