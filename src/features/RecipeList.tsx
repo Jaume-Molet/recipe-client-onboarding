@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import type { RecipeListItem } from "../api/dtos";
 import { getRecipes } from "../api/client";
-import { Spinner } from "../suitcase/atoms/Spinner/Spinner";
 import { Card } from "../suitcase/atoms/Card/Card";
+import { LoadingState } from "../components/LoadingState";
 import { FormattedText } from "../suitcase/atoms/FormattedText/FormattedText";
 import { Flex } from "../suitcase/atoms/Flex/Flex";
 import { Box } from "../suitcase/atoms/Box/Box";
@@ -30,8 +30,12 @@ export const RecipeList: React.FC = () => {
         setLoading(true);
         const data = await getRecipes();
         setRecipes(data);
-      } catch (err: any) {
-        setError(`Failed to load recipes: ${err.message}`);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(`Failed to load recipes: ${err.message}`);
+        } else {
+          setError(`Failed to load recipes: ${String(err)}`);
+        }
       } finally {
         setLoading(false);
       }
@@ -43,9 +47,7 @@ export const RecipeList: React.FC = () => {
   if (loading) {
     return (
       <Box padding={dt.dimensions.spacing["3x"]}>
-        <Flex>
-          <Spinner />
-        </Flex>
+        <LoadingState />
       </Box>
     );
   }

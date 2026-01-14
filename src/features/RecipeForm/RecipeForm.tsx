@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import type { Recipe } from "../../api/dtos";
 import { getRecipe, createRecipe, updateRecipe } from "../../api/client";
-import { Spinner } from "../../suitcase/atoms/Spinner/Spinner";
 import { FormattedText } from "../../suitcase/atoms/FormattedText/FormattedText";
 import { Flex } from "../../suitcase/atoms/Flex/Flex";
+import { LoadingState } from "../../components/LoadingState";
 import { Box } from "../../suitcase/atoms/Box/Box";
 import { Button } from "../../suitcase/atoms/Button/Button";
 import { TextInput } from "../../suitcase/atoms/TextInput/TextInput";
@@ -143,11 +143,7 @@ export const RecipeForm: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <Flex>
-        <Spinner />
-      </Flex>
-    );
+    return <LoadingState />;
   }
 
   return (
