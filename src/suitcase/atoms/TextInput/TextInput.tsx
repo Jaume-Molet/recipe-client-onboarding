@@ -1,6 +1,32 @@
+import styled from 'styled-components'
 import type { InputHTMLAttributes } from 'react'
 import type { TextInputProps } from './types'
-import styles from './TextInput.module.css'
+import { dt } from '../../tokens'
+
+type StyledInputProps = InputHTMLAttributes<HTMLInputElement> & { disabled?: boolean }
+const StyledInput = styled.input<StyledInputProps>`
+  width: 100%;
+  padding: ${dt.dimensions.spacing['1x']};
+  font-size: ${dt.fontSizes.md};
+  border: 1px solid #ccc;
+  border-radius: ${dt.dimensions.borderRadius.sm};
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: #0066cc;
+  }
+
+  &:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &::placeholder {
+    color: ${dt.colors.text.secondary};
+  }
+`
 
 /**
  * TextInput Component
@@ -25,11 +51,10 @@ function TextInput(props: TextInputProps) {
     autoComplete = 'off',
     minLength,
     maxLength,
-    className,
   } = props
 
   return (
-    <input
+    <StyledInput
       id={id}
       data-testid={dataTestId}
       type={type}
@@ -45,7 +70,6 @@ function TextInput(props: TextInputProps) {
       autoComplete={autoComplete}
       minLength={minLength}
       maxLength={maxLength}
-      className={`${styles.textInput} ${className || ''}`}
     />
   )
 }

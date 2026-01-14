@@ -46,8 +46,12 @@ export const RecipeForm: React.FC = () => {
           setName(recipe.name);
           setAuthorName(recipe.author_name || "");
           setIngredients(recipe.ingredients.map((ing) => ({ name: ing.name })));
-        } catch (err: any) {
-          setError(`Failed to load recipe: ${err.message}`);
+        } catch (err) {
+          if (err instanceof Error) {
+            setError(`Failed to load recipe: ${err.message}`);
+          } else {
+            setError(`Failed to load recipe: ${String(err)}`);
+          }
         } finally {
           setLoading(false);
         }
@@ -124,10 +128,16 @@ export const RecipeForm: React.FC = () => {
         });
         history.push(`/recipes/${newRecipe.id}`);
       }
-    } catch (err: any) {
-      setError(
-        `Failed to ${isEditMode ? "update" : "create"} recipe: ${err.message}`
-      );
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(
+          `Failed to ${isEditMode ? "update" : "create"} recipe: ${err.message}`
+        );
+      } else {
+        setError(
+          `Failed to ${isEditMode ? "update" : "create"} recipe: ${String(err)}`
+        );
+      }
       setSubmitting(false);
     }
   };
