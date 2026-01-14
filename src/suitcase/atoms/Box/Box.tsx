@@ -12,13 +12,13 @@ function Box(props: BoxProps) {
     elevation = 'none',
     'data-testid': testId = 'box',
   } = props
-  
-  const paddingValue = typeof padding === 'string' 
+
+  const paddingValue = typeof padding === 'string'
     ? (padding in dt.dimensions ? (dt.dimensions as any)[padding] : padding)
     : padding
-  
+
   const style: React.CSSProperties = paddingValue ? { padding: paddingValue } : {}
-  
+
   return (
     <div
       className={styles.box}
