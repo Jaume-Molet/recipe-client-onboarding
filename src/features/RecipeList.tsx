@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import type { RecipeListItem } from "../api/dtos";
 import { getRecipes } from "../api/client";
-import { Card } from "../suitcase/atoms/Card/Card";
 import { LoadingState } from "../components/LoadingState";
 import { FormattedText } from "../suitcase/atoms/FormattedText/FormattedText";
 import { Flex } from "../suitcase/atoms/Flex/Flex";
 import { Box } from "../suitcase/atoms/Box/Box";
 import { Button } from "../suitcase/atoms/Button/Button";
 import { dt } from "../suitcase/tokens";
+import { RecipeListItems } from "./RecipeList/RecipeListItems";
 
 /**
  * RecipeList Component
@@ -83,28 +83,7 @@ export const RecipeList: React.FC = () => {
         </Button>
       </Flex>
 
-      <Flex flexDirection="column" gap={dt.dimensions.spacing["2x"]}>
-        {recipes.map((recipe) => (
-          <Link
-            to={`/recipes/${recipe.id}`}
-            key={recipe.id}
-            className="link-unstyled"
-          >
-            <Card
-              padding={dt.dimensions.spacing["2x"]}
-              borderRadius={dt.dimensions.borderRadius.md}
-            >
-              <FormattedText
-                as="h2"
-                fontSize={dt.fontSizes.md}
-                color="#ffffff"
-              >
-                {recipe.name}
-              </FormattedText>
-            </Card>
-          </Link>
-        ))}
-      </Flex>
+      <RecipeListItems recipes={recipes} />
     </Box>
   );
 };
