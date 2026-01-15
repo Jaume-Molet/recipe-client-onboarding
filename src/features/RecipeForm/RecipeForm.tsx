@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import type { Recipe } from "../../api/dtos";
-import { getRecipe, createRecipe, updateRecipe } from "../../api/client";
+import { createRecipe, updateRecipe } from "../../api/client";
 import { FormattedText } from "../../suitcase/atoms/FormattedText/FormattedText";
 import { Flex } from "../../suitcase/atoms/Flex/Flex";
 import { LoadingState } from "../../components/LoadingState";
@@ -9,10 +8,7 @@ import { Box } from "../../suitcase/atoms/Box/Box";
 import { Button } from "../../suitcase/atoms/Button/Button";
 import { TextInput } from "../../suitcase/atoms/TextInput/TextInput";
 import { dt } from "../../suitcase/tokens";
-
-interface IngredientInput {
-  name: string;
-}
+import { useRecipeForm } from "./useRecipeForm";
 
 /**
  * RecipeForm Component
@@ -28,65 +24,26 @@ export const RecipeForm: React.FC = () => {
   const history = useHistory();
   const isEditMode = !!id;
 
-  const [name, setName] = useState<string>("");
-  const [authorName, setAuthorName] = useState<string>("");
-  const [ingredients, setIngredients] = useState<readonly IngredientInput[]>(
-    []
-  );
   const [loading, setLoading] = useState<boolean>(isEditMode);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (isEditMode && id) {
-      const fetchRecipe = async () => {
-        try {
-          setLoading(true);
-          const recipe: Recipe = await getRecipe(id);
-          setName(recipe.name);
-          setAuthorName(recipe.author_name || "");
-          setIngredients(recipe.ingredients.map((ing) => ({ name: ing.name })));
-        } catch (err) {
-          if (err instanceof Error) {
-            setError(`Failed to load recipe: ${err.message}`);
-          } else {
-            setError(`Failed to load recipe: ${String(err)}`);
-          }
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchRecipe();
-    }
-  }, [id, isEditMode]);
-
-  /**
-   * Adds a new empty ingredient input field to the form.
-   */
-  const handleAddIngredient = () => {
-    setIngredients([...ingredients, { name: "" }]);
-  };
-
-  /**
-   * Removes an ingredient input field at the specified index.
-   *
-   * @param index - The index of the ingredient to remove
-   */
-  const handleRemoveIngredient = (index: number) => {
-    setIngredients(ingredients.filter((_, i) => i !== index));
-  };
-
-  /**
-   * Updates the name of an ingredient at the specified index.
-   *
-   * @param index - The index of the ingredient to update
-   * @param value - The new name value for the ingredient
-   */
-  const handleIngredientChange = (index: number, value: string) => {
-    const updated = [...ingredients];
-    updated[index] = { name: value };
-    setIngredients(updated);
-  };
+  const {
+    name,
+    authorName,
+    ingredients,
+    setName,
+    setAuthorName,
+    handleAddIngredient,
+    handleRemoveIngredient,
+    handleIngredientChange,
+    validateForm,
+  } = useRecipeForm({
+    isEditMode,
+    recipeId: id,
+    onError: setError,
+    onLoadingChange: setLoading,
+  });
 
   /**
    * Handles form submission for both create and edit modes.
@@ -98,14 +55,9 @@ export const RecipeForm: React.FC = () => {
     e.preventDefault();
     setError(null);
 
-    if (!name.trim() || !authorName.trim()) {
-      setError("Recipe name and author name are required");
-      return;
-    }
-
-    const validIngredients = ingredients.filter((ing) => ing.name.trim());
-    if (validIngredients.length === 0) {
-      setError("At least one ingredient is required");
+    const validation = validateForm();
+    if (!validation.isValid) {
+      setError(validation.error || "Validation failed");
       return;
     }
 
@@ -116,7 +68,7 @@ export const RecipeForm: React.FC = () => {
         // Note: The backend API only supports adding ingredients, not updating recipe name or removing ingredients
         await updateRecipe(id, {
           requester_name: authorName.trim(),
-          ingredients_to_add: validIngredients,
+          ingredients_to_add: validation.validIngredients,
         });
         history.push(`/recipes/${id}`);
       } else {
@@ -124,7 +76,7 @@ export const RecipeForm: React.FC = () => {
         const newRecipe = await createRecipe({
           name: name.trim(),
           author_name: authorName.trim(),
-          ingredients: validIngredients,
+          ingredients: validation.validIngredients,
         });
         history.push(`/recipes/${newRecipe.id}`);
       }
