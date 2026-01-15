@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import type { Recipe } from "../../api/dtos";
 import { getRecipe, deleteRecipe } from "../../api/client";
-import { Spinner } from "../../suitcase/atoms/Spinner/Spinner";
 import { Card } from "../../suitcase/atoms/Card/Card";
+import { LoadingState } from "../../components/LoadingState";
 import { FormattedText } from "../../suitcase/atoms/FormattedText/FormattedText";
 import { Flex } from "../../suitcase/atoms/Flex/Flex";
 import { Box } from "../../suitcase/atoms/Box/Box";
@@ -32,8 +32,12 @@ export const RecipeDetail: React.FC = () => {
         setLoading(true);
         const data = await getRecipe(id);
         setRecipe(data);
-      } catch (err: any) {
-        setError(`Failed to load recipe: ${err.message}`);
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(`Failed to load recipe: ${err.message}`);
+        } else {
+          setError(`Failed to load recipe: ${String(err)}`);
+        }
       } finally {
         setLoading(false);
       }
@@ -63,18 +67,18 @@ export const RecipeDetail: React.FC = () => {
       setDeleting(true);
       await deleteRecipe(recipe.id, recipe.author_name);
       history.push("/");
-    } catch (err: any) {
-      setError(`Failed to delete recipe: ${err.message}`);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(`Failed to delete recipe: ${err.message}`);
+      } else {
+        setError(`Failed to delete recipe: ${String(err)}`);
+      }
       setDeleting(false);
     }
   };
 
   if (loading) {
-    return (
-      <Flex>
-        <Spinner />
-      </Flex>
-    );
+    return <LoadingState />;
   }
 
   if (error) {

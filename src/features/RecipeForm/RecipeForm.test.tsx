@@ -18,6 +18,8 @@ vi.mock('react-router-dom', async () => {
     useParams: () => mockUseParams(),
     useHistory: () => ({
       push: mockPush,
+      goBack: vi.fn(),
+      back: vi.fn(),
     }),
   }
 })

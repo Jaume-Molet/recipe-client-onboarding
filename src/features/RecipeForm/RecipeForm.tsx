@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { createRecipe, updateRecipe } from "../../api/client";
+import { useParams } from "react-router-dom";
 import { FormattedText } from "../../suitcase/atoms/FormattedText/FormattedText";
 import { Flex } from "../../suitcase/atoms/Flex/Flex";
 import { LoadingState } from "../../components/LoadingState";
@@ -9,6 +8,7 @@ import { Button } from "../../suitcase/atoms/Button/Button";
 import { TextInput } from "../../suitcase/atoms/TextInput/TextInput";
 import { dt } from "../../suitcase/tokens";
 import { useRecipeForm } from "./useRecipeForm";
+import { useRecipeApi } from "./useRecipeApi";
 
 /**
  * RecipeForm Component
@@ -21,12 +21,19 @@ import { useRecipeForm } from "./useRecipeForm";
  */
 export const RecipeForm: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
-  const history = useHistory();
   const isEditMode = !!id;
 
   const [loading, setLoading] = useState<boolean>(isEditMode);
-  const [submitting, setSubmitting] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
+
+  const {
+    submitting,
+    error: apiError,
+    fetchRecipe,
+    createRecipe: handleCreateRecipe,
+    updateRecipe: handleUpdateRecipe,
+    clearError,
+  } = useRecipeApi();
 
   const {
     name,
@@ -41,8 +48,8 @@ export const RecipeForm: React.FC = () => {
   } = useRecipeForm({
     isEditMode,
     recipeId: id,
-    onError: setError,
     onLoadingChange: setLoading,
+    fetchRecipe,
   });
 
   /**
@@ -53,46 +60,34 @@ export const RecipeForm: React.FC = () => {
    */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
+    clearError();
+    setValidationError(null);
 
     const validation = validateForm();
     if (!validation.isValid) {
-      setError(validation.error || "Validation failed");
+      setValidationError(validation.error || "Validation failed");
       return;
     }
 
-    try {
-      setSubmitting(true);
-      if (isEditMode && id) {
-        // Edit mode: add ingredients to existing recipe
-        // Note: The backend API only supports adding ingredients, not updating recipe name or removing ingredients
-        await updateRecipe(id, {
-          requester_name: authorName.trim(),
-          ingredients_to_add: validation.validIngredients,
-        });
-        history.push(`/recipes/${id}`);
-      } else {
-        // Create mode: create new recipe
-        const newRecipe = await createRecipe({
-          name: name.trim(),
-          author_name: authorName.trim(),
-          ingredients: validation.validIngredients,
-        });
-        history.push(`/recipes/${newRecipe.id}`);
-      }
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(
-          `Failed to ${isEditMode ? "update" : "create"} recipe: ${err.message}`
-        );
-      } else {
-        setError(
-          `Failed to ${isEditMode ? "update" : "create"} recipe: ${String(err)}`
-        );
-      }
-      setSubmitting(false);
+    if (isEditMode && id) {
+      // Edit mode: add ingredients to existing recipe
+      // Note: The backend API only supports adding ingredients, not updating recipe name or removing ingredients
+      await handleUpdateRecipe(id, {
+        requester_name: authorName.trim(),
+        ingredients_to_add: validation.validIngredients,
+      });
+    } else {
+      // Create mode: create new recipe
+      await handleCreateRecipe({
+        name: name.trim(),
+        author_name: authorName.trim(),
+        ingredients: validation.validIngredients,
+      });
     }
   };
+
+  // Use API error or validation error
+  const error = apiError || validationError;
 
   if (loading) {
     return <LoadingState />;
@@ -107,7 +102,7 @@ export const RecipeForm: React.FC = () => {
           </FormattedText>
           <Button
             variant="secondary"
-            onClick={() => history.push("/")}
+            onClick={() => window.history.back()}
             disabled={submitting}
           >
             Back to Recipes
@@ -215,7 +210,7 @@ export const RecipeForm: React.FC = () => {
               </Button>
               <Button
                 variant="secondary"
-                onClick={() => history.goBack()}
+                onClick={() => window.history.back()}
                 disabled={submitting}
               >
                 Cancel

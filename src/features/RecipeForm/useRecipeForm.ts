@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Recipe } from "../../api/dtos";
-import { getRecipe } from "../../api/client";
 
 interface IngredientInput {
   name: string;
@@ -9,8 +8,8 @@ interface IngredientInput {
 interface UseRecipeFormProps {
   isEditMode: boolean;
   recipeId?: string;
-  onError: (error: string) => void;
   onLoadingChange: (loading: boolean) => void;
+  fetchRecipe: (id: string) => Promise<Recipe | null>;
 }
 
 interface UseRecipeFormReturn {
@@ -33,15 +32,15 @@ interface UseRecipeFormReturn {
  *
  * @param isEditMode - Whether the form is in edit mode
  * @param recipeId - The recipe ID when in edit mode
- * @param onError - Callback for error handling
  * @param onLoadingChange - Callback for loading state changes
+ * @param fetchRecipe - Function to fetch recipe data
  * @returns Form state and handlers
  */
 export const useRecipeForm = ({
   isEditMode,
   recipeId,
-  onError,
   onLoadingChange,
+  fetchRecipe,
 }: UseRecipeFormProps): UseRecipeFormReturn => {
   const [name, setName] = useState<string>("");
   const [authorName, setAuthorName] = useState<string>("");
@@ -50,26 +49,31 @@ export const useRecipeForm = ({
   // Initialize form data in edit mode
   useEffect(() => {
     if (isEditMode && recipeId) {
-      const fetchRecipe = async () => {
-        try {
-          onLoadingChange(true);
-          const recipe: Recipe = await getRecipe(recipeId);
+      let isMounted = true;
+      const loadRecipe = async () => {
+        onLoadingChange(true);
+        const recipe = await fetchRecipe(recipeId);
+        if (isMounted && recipe) {
           setName(recipe.name);
           setAuthorName(recipe.author_name || "");
           setIngredients(recipe.ingredients.map((ing) => ({ name: ing.name })));
-        } catch (err) {
-          if (err instanceof Error) {
-            onError(`Failed to load recipe: ${err.message}`);
-          } else {
-            onError(`Failed to load recipe: ${String(err)}`);
-          }
-        } finally {
+        }
+        if (isMounted) {
           onLoadingChange(false);
         }
       };
-      fetchRecipe();
+      loadRecipe();
+      return () => {
+        isMounted = false;
+      };
+    } else {
+      // Reset form when not in edit mode
+      setName("");
+      setAuthorName("");
+      setIngredients([]);
     }
-  }, [isEditMode, recipeId, onError, onLoadingChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditMode, recipeId]); // fetchRecipe is stable (useCallback with no deps), onLoadingChange is intentionally excluded
 
   /**
    * Adds a new empty ingredient input field to the form.
